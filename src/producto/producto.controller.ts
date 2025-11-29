@@ -102,6 +102,24 @@ export class ProductoController {
     return { success: true, data, total: data.length };
   }
 
+  @Get('categoria/:categoriaId')
+  @ApiOperation({ summary: 'Listar productos por categoría' })
+  @ApiParam({ name: 'categoriaId', description: 'ID de la categoría' })
+  @ApiResponse({ status: 200, description: 'Lista de productos de la categoría' })
+  async findByCategoria(@Param('categoriaId') categoriaId: string) {
+    const data = await this.productoService.findByCategoria(categoriaId);
+    return { success: true, data, total: data.length };
+  }
+
+  @Get('search/:termino')
+  @ApiOperation({ summary: 'Buscar productos por término' })
+  @ApiParam({ name: 'termino', description: 'Término de búsqueda' })
+  @ApiResponse({ status: 200, description: 'Lista de productos encontrados' })
+  async buscarProductos(@Param('termino') termino: string) {
+    const data = await this.productoService.buscarProductos(termino);
+    return { success: true, data, total: data.length };
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtener Producto por ID' })
   @ApiParam({ name: 'id', description: 'ID del Producto' })

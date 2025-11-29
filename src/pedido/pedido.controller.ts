@@ -34,8 +34,9 @@ export class PedidoController {
   @ApiResponse({ status: 201, description: 'Pedido creado exitosamente' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
-  async create(@Body() createPedidoDto: CreatePedidoDto) {
-    const data = await this.pedidoService.create(createPedidoDto);
+  async create(@Body() createPedidoDto: CreatePedidoDto, @Req() req: any) {
+    const userId = req.user.userId;
+    const data = await this.pedidoService.create(createPedidoDto, userId);
     return {
       success: true,
       message: 'Pedido creado exitosamente',
@@ -100,6 +101,53 @@ export class PedidoController {
   async findAll() {
     const data = await this.pedidoService.findAll();
     return { success: true, data, total: data.length };
+  }
+
+  @Get('cliente/:clienteId')
+  @ApiOperation({ summary: 'Obtener pedidos de un cliente' })
+  @ApiParam({ name: 'clienteId', description: 'ID del cliente' })
+  @ApiResponse({ status: 200, description: 'Lista de pedidos del cliente' })
+  async findByCliente(@Param('clienteId') clienteId: string) {
+    const data = await this.pedidoService.findByCliente(clienteId);
+    return { success: true, data, total: data.length };
+  }
+
+  @Post('crear-desde-carrito')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear pedido desde carrito' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        clienteId: { type: 'string', description: 'ID del cliente' },
+        productos: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              productoId: { type: 'string' },
+              cantidad: { type: 'number' },
+              precio: { type: 'number' }
+            }
+          }
+        },
+        direccionEntrega: { type: 'string', description: 'Dirección de entrega' }
+      },
+      required: ['clienteId', 'productos', 'direccionEntrega']
+    }
+  })
+  @ApiResponse({ status: 201, description: 'Pedido creado exitosamente desde carrito' })
+  async crearDesdeCarrito(@Body() carritoDto: {
+    clienteId: string;
+    productos: Array<{ productoId: string; cantidad: number; precio: number }>;
+    direccionEntrega: string;
+  }) {
+    const data = await this.pedidoService.crearDesdeCarrito(carritoDto);
+    return {
+      success: true,
+      message: 'Pedido creado exitosamente desde carrito',
+      data,
+    };
   }
 
   @Get(':id')

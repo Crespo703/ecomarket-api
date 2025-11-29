@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { Producto, ProductoDocument } from './schemas/producto.schema';
@@ -19,6 +19,12 @@ export class ProductoService {
   async findAll(): Promise<Producto[]> {
     const productos = await this.productoModel.find().populate('categoria', 'nombre descripcion');
     return productos;
+  }
+
+  
+  async findByProductor(productorId: string): Promise<Producto[]> {
+    return this.productoModel.find({ productor: productorId })
+      .populate('productor', 'nombre email telefono ubicacion');
   }
 
   async findOne(id: string | number): Promise<Producto> {
@@ -42,5 +48,25 @@ export class ProductoService {
     if (!result) {
       throw new NotFoundException(`Producto con ID ${id} no encontrado`);
     }
+  }
+
+  async findByCategoria(categoriaId: string): Promise<Producto[]> {
+    const productos = await this.productoModel.find({ categoria: new Types.ObjectId(categoriaId) })
+      .populate('categoria', 'nombre descripcion')
+      .sort({ nombre: 1 });
+    return productos;
+  }
+
+  async buscarProductos(termino: string): Promise<Producto[]> {
+    const productos = await this.productoModel.find({
+      $or: [
+        { nombre: { $regex: termino, $options: 'i' } },
+        { descripcion: { $regex: termino, $options: 'i' } },
+        { tags: { $in: [new RegExp(termino, 'i')] } }
+      ]
+    })
+    .populate('categoria', 'nombre descripcion')
+    .sort({ nombre: 1 });
+    return productos;
   }
 }

@@ -495,6 +495,129 @@
           }
         }
       ]
+    },
+    {
+      "name": "Producto",
+      "item": [
+        {
+          "name": "Productos por Categoría",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/producto/categoria/{{categoriaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto",
+                "categoria",
+                "{{categoriaId}}"
+              ]
+            },
+            "description": "Filtrar productos por categoría específica"
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Productos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/producto/search/{{termino}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto",
+                "search",
+                "{{termino}}"
+              ]
+            },
+            "description": "Buscar productos por término en nombre o descripción"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints específicos de Producto"
+    },
+    {
+      "name": "Pedido",
+      "item": [
+        {
+          "name": "Mis Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/cliente/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "cliente",
+                "{{clienteId}}"
+              ]
+            },
+            "description": "Obtener historial de pedidos del cliente"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Pedido desde Carrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/crear-desde-carrito",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "crear-desde-carrito"
+              ]
+            },
+            "description": "Crear pedido desde los items del carrito",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"productos\": [\n    {\n      \"productoId\": \"{{productoId}}\",\n      \"cantidad\": 1,\n      \"precio\": 100\n    }\n  ],\n  \"direccionEntrega\": \"Dirección de entrega\"\n}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints específicos de Pedido"
     }
   ],
   "variable": [
