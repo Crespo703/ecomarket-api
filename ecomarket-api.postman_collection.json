@@ -611,7 +611,7 @@
             "description": "Crear pedido desde los items del carrito",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"productos\": [\n    {\n      \"productoId\": \"{{productoId}}\",\n      \"cantidad\": 1,\n      \"precio\": 100\n    }\n  ],\n  \"direccionEntrega\": \"Dirección de entrega\"\n}"
+              "raw": "{\n  \"items\": [\n    {\n      \"producto\": \"{{productoId}}\",\n      \"cantidad\": 1\n    }\n  ],\n  \"direccionEntrega\": \"Calle 123, Depto 4B\",\n  \"notasEntrega\": \"Tocar timbre\"\n}"
             }
           },
           "response": []
@@ -623,7 +623,42 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3001/api",
+      "value": "http://localhost:3002/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "filename",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoriaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "termino",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "clienteId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productoId",
+      "value": "",
       "type": "string"
     }
   ]
